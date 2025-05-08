@@ -1,0 +1,45 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: gray;
+}
+
+#container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-top: 100px;
+}
+#container #input-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#container #todos-area {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#container #todos-area .todo-place {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+#container #todos-area .todo-place .todo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#container #todos-area .todo-place .todo * {
+  margin: 20px;
+}
+#container #todos-area .todo-place .todo button {
+  width: 100px;
+}/*# sourceMappingURL=style.css.map */

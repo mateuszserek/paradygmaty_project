@@ -1,0 +1,50 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+@mixin flex-box {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    background-color: gray;
+}
+
+
+#container {
+    @include flex-box;
+    flex-direction: column;
+    margin-top: 100px;
+    
+    #input-area {
+        @include flex-box;
+        flex-direction: column;
+    }
+
+    #todos-area {
+        @include flex-box;
+        flex-direction: column;
+
+        .todo-place {
+            @include flex-box;
+            flex-direction: column;
+
+            .todo {
+                @include flex-box;
+                
+                * {
+                    margin: 20px;
+                }
+                
+                button {
+                    width: 100px;
+                }
+            }
+        }
+
+    }
+
+}
