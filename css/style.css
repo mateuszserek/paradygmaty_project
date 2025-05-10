@@ -20,6 +20,17 @@ body {
   align-items: center;
   flex-direction: column;
 }
+#container #input-area * {
+  margin: 20px;
+}
+#container #input-area #todo-text-input {
+  all: unset;
+  padding: 5px;
+  background-color: white;
+  width: 300px;
+  height: 30px;
+  border-radius: 10px;
+}
 #container #todos-area {
   display: flex;
   justify-content: center;
