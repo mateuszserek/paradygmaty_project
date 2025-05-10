@@ -1,6 +1,7 @@
 * {
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 body {
@@ -12,13 +13,13 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin-top: 100px;
 }
 #container #input-area {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 50px;
 }
 #container #input-area * {
   margin: 20px;
@@ -27,30 +28,54 @@ body {
   all: unset;
   padding: 5px;
   background-color: white;
+  border: 1px solid;
   width: 300px;
   height: 30px;
   border-radius: 10px;
+}
+#container #input-area #todo-text-input:focus {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+#container #input-area #add-todo-button {
+  width: 100px;
+  height: 30px;
+  font-size: 15px;
+}
+#container #input-area #add-todo-button {
+  cursor: pointer;
 }
 #container #todos-area {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  margin-top: 50px;
 }
 #container #todos-area .todo-place {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  justify-content: flex-start;
+  min-height: 300px;
 }
 #container #todos-area .todo-place .todo {
   display: flex;
   justify-content: center;
   align-items: center;
+  justify-content: space-between;
+  width: 700px;
+  height: 30px;
+  background-color: white;
+  border-radius: 20px;
+  margin: 15px 0px;
 }
 #container #todos-area .todo-place .todo * {
   margin: 20px;
 }
 #container #todos-area .todo-place .todo button {
   width: 100px;
+}
+#container #todos-area .todo-place .todo button:hover {
+  cursor: pointer;
 }/*# sourceMappingURL=style.css.map */

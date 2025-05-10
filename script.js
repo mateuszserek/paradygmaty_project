@@ -27,17 +27,18 @@ class ToDo {
         deleteB.type = "submit"
         deleteB.textContent = "Usuń"
 
+        let buttonDiv = document.createElement("div")
+        buttonDiv.append(doneB)
+        buttonDiv.append(deleteB)
+
         todoDiv.append(pElem)
-        todoDiv.append(doneB)
-        todoDiv.append(deleteB)
+        todoDiv.append(buttonDiv)
 
         notDoneToDoArea.append(todoDiv)
     }
 
     eventListeners = () => {
-        this.deleteButton.addEventListener("click", () => {
-            this.killElement()
-        })
+        this.deleteButton.addEventListener("click", this.killElement)
 
         this.doneButton.addEventListener("click", () => {
             doneToDoArea.appendChild(this.todoDiv)
@@ -51,9 +52,28 @@ class ToDo {
 }
 
 
-addButton.addEventListener("click", () => {
-    let todoString = textInput.value
+const validateString = (str) => {
+    if (str == "") {
+        return false 
+    }
+    return true
+}
+
+const addTodoObject = () => {
+    const todoString = textInput.value
+    if (!validateString(todoString)) {
+        alert("empty string")
+        return
+    } 
+
     textInput.value = ""
     // function in prolog to check todo string
     const todo = new ToDo(todoString)
+}
+
+addButton.addEventListener("click", addTodoObject)
+document.addEventListener("keypress", e => {
+    if (e.key == "Enter") {
+        addTodoObject()
+    }
 })
