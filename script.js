@@ -37,11 +37,16 @@ class ToDo {
         notDoneToDoArea.append(todoDiv)
     }
 
+    doneButtonDelete = () => {
+        this.doneButton.style.display = "None"
+    }
+
     eventListeners = () => {
         this.deleteButton.addEventListener("click", this.killElement)
 
         this.doneButton.addEventListener("click", () => {
             doneToDoArea.appendChild(this.todoDiv)
+            this.doneButtonDelete()
         })
     }
 

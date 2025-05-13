@@ -11,7 +11,8 @@
 }
 
 body {
-    background-color: gray;
+    background-color: pink;
+    color: rgb(61, 57, 57)
 }
 
 
@@ -67,7 +68,8 @@ body {
                 @include flex-box;
                 justify-content: space-between;
                 width: 700px;
-                height: 30px;
+                height: 50px;
+                border: 2px solid black;
                 background-color: white;
                 border-radius: 20px;
                 margin: 15px 0px;
@@ -77,11 +79,21 @@ body {
                 }
                 
                 button {
+                    all: unset;
+                    font-size: 16px;
+                    text-align: center;
+                    margin: 3px;
+                    border-radius: 7px;
+                    border: 1px solid black;
+                    height: 20px;
+                    background-color: rgb(235, 232, 232);
                     width: 100px;
+                    
                 }
 
                 button:hover {
                     cursor: pointer;
+                    background-color: rgb(217, 215, 215);
                 }
             }
         }

@@ -5,7 +5,8 @@
 }
 
 body {
-  background-color: gray;
+  background-color: pink;
+  color: rgb(61, 57, 57);
 }
 
 #container {
@@ -65,7 +66,8 @@ body {
   align-items: center;
   justify-content: space-between;
   width: 700px;
-  height: 30px;
+  height: 50px;
+  border: 2px solid black;
   background-color: white;
   border-radius: 20px;
   margin: 15px 0px;
@@ -74,8 +76,17 @@ body {
   margin: 20px;
 }
 #container #todos-area .todo-place .todo button {
+  all: unset;
+  font-size: 16px;
+  text-align: center;
+  margin: 3px;
+  border-radius: 7px;
+  border: 1px solid black;
+  height: 20px;
+  background-color: rgb(235, 232, 232);
   width: 100px;
 }
 #container #todos-area .todo-place .todo button:hover {
   cursor: pointer;
+  background-color: rgb(217, 215, 215);
 }/*# sourceMappingURL=style.css.map */
