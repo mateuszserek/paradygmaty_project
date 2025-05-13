@@ -35,6 +35,7 @@ class ToDo {
         todoDiv.append(buttonDiv)
 
         notDoneToDoArea.append(todoDiv)
+        textInput.setAttribute("placeholder", "Wpisz treść swojego todosa")
     }
 
     doneButtonDelete = () => {
@@ -67,7 +68,7 @@ const validateString = (str) => {
 const addTodoObject = () => {
     const todoString = textInput.value
     if (!validateString(todoString)) {
-        alert("empty string")
+        textInput.setAttribute("placeholder", "pusty napis")
         return
     } 
 
