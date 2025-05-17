@@ -6,6 +6,7 @@ const addButton = document.querySelector("#add-todo-button")
 const textInput = document.querySelector("#todo-text-input")
 const alertArea = document.querySelector("#too-long-text-alert")
 const prologSession = pl.create()
+let counterForID = 0 
 
 class PrologRules {
     constructor() {
@@ -13,36 +14,68 @@ class PrologRules {
             emptytext('a0').
         `
         this.tooLongTextRule = `
-            toolongtext(X) :- X > 10.
+            toolongtext(X) :- X > 40.
         `
-        this.existingTodo = []
+        this.existingTodo = [] //contains: [id, full string, **keywords array]
     }
 
     getExistingTodoPrologString = () => {
         if (this.existingTodo.length == 0) {
-            console.error("empty todo list")
-            return
+            return -1
         }
 
         let todoPrologString = `\n`
 
-        for (let i = 0; i < this.existingTodo.length; i++)  {
-            todoPrologString += `existTodoString('${this.existingTodo[i]}').\n`
+        this.existingTodo.forEach(element => {
+            todoPrologString += `existTodoString('${element[1]}').\n`
+        })
+        return todoPrologString
+    }
+
+    getExistingKeywordPrologString = () => {
+        if (this.existingTodo.length == 0) {
+            return -1
         }
+
+        let todoPrologString = `\n`
+
+        this.existingTodo.forEach(element => {
+            element[2].forEach(key => {
+                todoPrologString += `existKeyword('${key}').\n`
+            })
+        })
 
         return todoPrologString
     }
 
-    addTodoString = (str) => {
-        this.existingTodo.push(str)
+    addTodoString = (str, todoID) => {
+        const keywords = []
+        str.split(" ").forEach(elem => {
+            if(elem.length > 4) {
+                keywords.push(elem)
+            }
+        })
+        console.log(keywords)
+        this.existingTodo.push([todoID, str, keywords])
+    }
+
+    removeTodoString = (todoID) => {
+        this.existingTodo.forEach(element => {
+            if(element[0] == todoID) {
+                const index = this.existingTodo.indexOf(element)
+                this.existingTodo.splice(index, 1)
+            }
+        })
     }
 }
-
 
 const prologRules = new PrologRules()
 
 class ToDo {
     constructor(text) {
+        this.id = counterForID
+        counterForID ++
+
         this.text = text
         this.doneButton = document.createElement("button")
         this.deleteButton = document.createElement("button")
@@ -88,10 +121,10 @@ class ToDo {
 
     killElement = () => {
         this.todoDiv.remove()
+        prologRules.removeTodoString(this.id)
         delete this
     }
 }
-
 
 const removeAlerts = () => {
     textInput.value = ""
@@ -117,7 +150,6 @@ const loadPrologQuery = (query, toBeConsulted) => {
 
 async function emptyText(str) {
     const query = `emptytext('a${str.length}').`
-    // magiczna konstrukcja z uzyciem " ` ` " znaku bo jako zwykly string nie dziala
     const toBeConsulted = prologRules.emptyTextRule
     const prologResponse = await loadPrologQuery(query, toBeConsulted).then(res => {
         return res
@@ -136,9 +168,40 @@ async function tooLongText(str) {
     return prologResponse //bool
 }
 
+async function checkIfNotAlreadyExist(str) {
+    const toBeConsulted = prologRules.getExistingTodoPrologString()
+    if (toBeConsulted == -1) {
+        return false
+    }
+    const query = `existTodoString('${str}').`
+    const prologResponse = await loadPrologQuery(query, toBeConsulted).then(res => {
+        return res 
+    })
+    return prologResponse //bool
+}
+
+async function checkIfContainKeywords(str) {
+    const toBeConsulted = prologRules.getExistingKeywordPrologString()
+
+    if(toBeConsulted == -1) {
+        return false
+    }
+
+    const keywords = str.split(" ")
+    for(let i = 0; i < keywords.length; i++) {
+        const query = `existKeyword('${keywords[i]}').`
+        const prologResponse = await loadPrologQuery(query, toBeConsulted)
+
+        if(prologResponse == true) {
+            return true
+        }
+    }
+    return false
+}
+
+
 async function addTodoObject() {
     const todoString = textInput.value
-
     const empty = await emptyText(todoString)
 
     if(empty) {
@@ -153,10 +216,24 @@ async function addTodoObject() {
         return
     } 
 
+    const alreadyExist = await checkIfNotAlreadyExist(todoString)
+
+    if(alreadyExist) {
+        alert("w tym miejscu pojawi się coś gdy tekst już istnieje ;)")
+        return
+    }
+
+    const hasKeywords = await checkIfContainKeywords(todoString)
+
+    if(hasKeywords) {
+        alert("słowa kluczowe")
+        return
+    }
+
     removeAlerts()
     const todo = new ToDo(todoString)
-    prologRules.addTodoString(todoString)
-    console.log(prologRules.existingTodo)
+    prologRules.addTodoString(todoString, todo.id)
+    //console.log(prologRules.getExistingTodoPrologString())
 }
 
 addButton.addEventListener("click", addTodoObject)
