@@ -4,6 +4,7 @@ const notDoneToDoArea = document.querySelector("#not-done-todo")
 const doneToDoArea = document.querySelector("#done-todo")
 const addButton = document.querySelector("#add-todo-button")
 const textInput = document.querySelector("#todo-text-input")
+const alertArea = document.querySelector("#too-long-text-alert")
 const prologSession = pl.create()
 
 class PrologRules {
@@ -16,7 +17,27 @@ class PrologRules {
         `
         this.existingTodo = []
     }
+
+    getExistingTodoPrologString = () => {
+        if (this.existingTodo.length == 0) {
+            console.error("empty todo list")
+            return
+        }
+
+        let todoPrologString = `\n`
+
+        for (let i = 0; i < this.existingTodo.length; i++)  {
+            todoPrologString += `existTodoString('${this.existingTodo[i]}').\n`
+        }
+
+        return todoPrologString
+    }
+
+    addTodoString = (str) => {
+        this.existingTodo.push(str)
+    }
 }
+
 
 const prologRules = new PrologRules()
 
@@ -72,6 +93,11 @@ class ToDo {
 }
 
 
+const removeAlerts = () => {
+    textInput.value = ""
+    alertArea.classList.remove("visible")
+}
+
 //generalnie działa ale strasznie dziwny problem był z asynchronicznością
 const loadPrologQuery = (query, toBeConsulted) => {
         return new Promise((resolve, reject) => {
@@ -123,12 +149,14 @@ async function addTodoObject() {
     const tooLong = await tooLongText(todoString)
 
     if (tooLong) {
-        textInput.setAttribute("placeholder", "pusty napis")
+        alertArea.classList.add("visible")
         return
     } 
 
-    textInput.value = ""
+    removeAlerts()
     const todo = new ToDo(todoString)
+    prologRules.addTodoString(todoString)
+    console.log(prologRules.existingTodo)
 }
 
 addButton.addEventListener("click", addTodoObject)

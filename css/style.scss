@@ -15,6 +15,9 @@ body {
     color: rgb(61, 57, 57)
 }
 
+.visible {
+    visibility: visible !important;
+}
 
 #container {
     @include flex-box;
@@ -24,6 +27,11 @@ body {
         @include flex-box;
         flex-direction: column;
         margin-top: 50px;
+
+        #too-long-text-alert {
+            visibility: hidden;
+            color: red;
+        }
 
         * {
             margin: 20px;
