@@ -43,8 +43,8 @@ class PrologRules {
             element[2].forEach(key => {
                 todoPrologString += `existKeyword('${key}').\n`
             })
-        })
-
+        })   
+             
         return todoPrologString
     }
 
