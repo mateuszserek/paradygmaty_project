@@ -4,7 +4,21 @@ const notDoneToDoArea = document.querySelector("#not-done-todo")
 const doneToDoArea = document.querySelector("#done-todo")
 const addButton = document.querySelector("#add-todo-button")
 const textInput = document.querySelector("#todo-text-input")
+const prologSession = pl.create()
 
+class PrologRules {
+    constructor() {
+        this.emptyTextRule = `
+            emptytext('a0').
+        `
+        this.tooLongTextRule = `
+            toolongtext(X) :- X > 10.
+        `
+        this.existingTodo = []
+    }
+}
+
+const prologRules = new PrologRules()
 
 class ToDo {
     constructor(text) {
@@ -58,22 +72,62 @@ class ToDo {
 }
 
 
-const validateString = (str) => {
-    if (str == "") {
-        return false 
-    }
-    return true
+//generalnie działa ale strasznie dziwny problem był z asynchronicznością
+const loadPrologQuery = (query, toBeConsulted) => {
+        return new Promise((resolve, reject) => {
+            prologSession.consult(toBeConsulted)
+            prologSession.query(query)
+            prologSession.answer(x => { 
+                const val = prologSession.format_answer(x)
+                if (val === "true") {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                }
+            })
+        })
 }
 
-const addTodoObject = () => {
+
+async function emptyText(str) {
+    const query = `emptytext('a${str.length}').`
+    // magiczna konstrukcja z uzyciem " ` ` " znaku bo jako zwykly string nie dziala
+    const toBeConsulted = prologRules.emptyTextRule
+    const prologResponse = await loadPrologQuery(query, toBeConsulted).then(res => {
+        return res
+    })
+
+    return prologResponse //bool
+}
+
+async function tooLongText(str) {
+    const query = `toolongtext(${str.length}).`
+    const toBeConsulted = prologRules.tooLongTextRule
+    const prologResponse = await loadPrologQuery(query, toBeConsulted).then(res => {
+        return res
+    })
+
+    return prologResponse //bool
+}
+
+async function addTodoObject() {
     const todoString = textInput.value
-    if (!validateString(todoString)) {
+
+    const empty = await emptyText(todoString)
+
+    if(empty) {
+        textInput.setAttribute("placeholder", "pusty napis")
+        return
+    }
+
+    const tooLong = await tooLongText(todoString)
+
+    if (tooLong) {
         textInput.setAttribute("placeholder", "pusty napis")
         return
     } 
 
     textInput.value = ""
-    // function in prolog to check todo string
     const todo = new ToDo(todoString)
 }
 
