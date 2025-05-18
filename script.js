@@ -7,6 +7,7 @@ const textInput = document.querySelector("#todo-text-input")
 const alertArea = document.querySelector("#too-long-text-alert")
 const popup = document.querySelector("#popup")
 const popupAddButton = document.querySelector("#popup-add-button")
+const popupCancelButton = document.querySelector("#popup-delete-button")
 const prologSession = pl.create()
 let counterForID = 0 
 
@@ -130,6 +131,7 @@ class ToDo {
 
 const removeAlerts = () => {
     textInput.value = ""
+    document.body.style.overflow = "auto"
     alertArea.classList.remove("visible")
     popup.classList.remove("visible")
 }
@@ -235,6 +237,7 @@ async function addTodoObject() {
 
     if(hasKeywords) {
         popup.classList.toggle("visible")
+        document.body.style.overflow = "hidden"
         return
     }
 

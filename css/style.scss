@@ -12,7 +12,7 @@
 
 body {
     background-color: pink;
-    color: rgb(61, 57, 57)
+    color: rgb(61, 57, 57);
 }
 
 .visible {
@@ -27,14 +27,23 @@ body {
     width: 100%;
     height: 100%;
     visibility: hidden;
+    background-color: rgb(70, 67, 67);
+    opacity: 0.95;
     @include flex-box;
 
     #popup-area {
-        width: 400px;
-        height: 100px;
+        width: 500px;
+        height: 150px;
+        border-radius: 5px;
+        border: 1px black solid;
         @include flex-box;
         flex-direction: column;
-        background-color: white;
+        background-color: rgb(255, 255, 255);
+        z-index: 2;
+
+        p {
+            padding-bottom: 20px;
+        }
     }
 }
 
