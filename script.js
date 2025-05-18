@@ -5,6 +5,8 @@ const doneToDoArea = document.querySelector("#done-todo")
 const addButton = document.querySelector("#add-todo-button")
 const textInput = document.querySelector("#todo-text-input")
 const alertArea = document.querySelector("#too-long-text-alert")
+const popup = document.querySelector("#popup")
+const popupAddButton = document.querySelector("#popup-add-button")
 const prologSession = pl.create()
 let counterForID = 0 
 
@@ -129,6 +131,7 @@ class ToDo {
 const removeAlerts = () => {
     textInput.value = ""
     alertArea.classList.remove("visible")
+    popup.classList.remove("visible")
 }
 
 //generalnie działa ale strasznie dziwny problem był z asynchronicznością
@@ -199,6 +202,11 @@ async function checkIfContainKeywords(str) {
     return false
 }
 
+const addAfterValidation = (todoString) => {
+    removeAlerts()
+    const todo = new ToDo(todoString)
+    prologRules.addTodoString(todoString, todo.id)
+}
 
 async function addTodoObject() {
     const todoString = textInput.value
@@ -226,14 +234,11 @@ async function addTodoObject() {
     const hasKeywords = await checkIfContainKeywords(todoString)
 
     if(hasKeywords) {
-        alert("słowa kluczowe")
+        popup.classList.toggle("visible")
         return
     }
 
-    removeAlerts()
-    const todo = new ToDo(todoString)
-    prologRules.addTodoString(todoString, todo.id)
-    //console.log(prologRules.getExistingTodoPrologString())
+    addAfterValidation(todoString)
 }
 
 addButton.addEventListener("click", addTodoObject)
@@ -241,4 +246,8 @@ document.addEventListener("keypress", e => {
     if (e.key == "Enter") {
         addTodoObject()
     }
+})
+popupAddButton.addEventListener("click", () => {
+    const todoString = textInput.value
+    addAfterValidation(todoString)
 })
