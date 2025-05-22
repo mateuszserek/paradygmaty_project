@@ -129,6 +129,15 @@ class ToDo {
     }
 }
 
+
+const addKeypressListener = () => {
+    document.addEventListener("keypress", e => {
+        if (e.key == "Enter") {
+            addTodoObject()
+        }
+    })
+}
+
 const removeAlerts = () => {
     textInput.value = ""
     document.body.style.overflow = "auto"
@@ -136,7 +145,6 @@ const removeAlerts = () => {
     popup.classList.remove("visible")
 }
 
-//generalnie działa ale strasznie dziwny problem był z asynchronicznością
 const loadPrologQuery = (query, toBeConsulted) => {
         return new Promise((resolve, reject) => {
             prologSession.consult(toBeConsulted)
@@ -245,12 +253,10 @@ async function addTodoObject() {
 }
 
 addButton.addEventListener("click", addTodoObject)
-document.addEventListener("keypress", e => {
-    if (e.key == "Enter") {
-        addTodoObject()
-    }
-})
+addKeypressListener()
+
 popupAddButton.addEventListener("click", () => {
     const todoString = textInput.value
     addAfterValidation(todoString)
+    removeAlerts()
 })
