@@ -58,7 +58,7 @@ class PrologRules {
                 keywords.push(elem)
             }
         })
-        console.log(keywords)
+        
         this.existingTodo.push([todoID, str, keywords])
     }
 
@@ -130,13 +130,13 @@ class ToDo {
 }
 
 
-const addKeypressListener = () => {
-    document.addEventListener("keypress", e => {
-        if (e.key == "Enter") {
-            addTodoObject()
-        }
-    })
-}
+// const addKeypressListener = () => {
+//     document.addEventListener("keypress", e => {
+//         if (e.key == "Enter") {
+//             addTodoObject()
+//         }
+//     })
+// }
 
 const removeAlerts = () => {
     textInput.value = ""
@@ -253,10 +253,11 @@ async function addTodoObject() {
 }
 
 addButton.addEventListener("click", addTodoObject)
-addKeypressListener()
 
 popupAddButton.addEventListener("click", () => {
     const todoString = textInput.value
     addAfterValidation(todoString)
     removeAlerts()
 })
+
+popupCancelButton.addEventListener("click", removeAlerts)
