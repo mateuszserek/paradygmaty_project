@@ -9,7 +9,9 @@ const popup = document.querySelector("#popup")
 const popupAddButton = document.querySelector("#popup-add-button")
 const popupCancelButton = document.querySelector("#popup-delete-button")
 const prologSession = pl.create()
+
 let counterForID = 0 
+let isAlertOn = false
 
 class PrologRules {
     constructor() {
@@ -130,19 +132,12 @@ class ToDo {
 }
 
 
-// const addKeypressListener = () => {
-//     document.addEventListener("keypress", e => {
-//         if (e.key == "Enter") {
-//             addTodoObject()
-//         }
-//     })
-// }
-
 const removeAlerts = () => {
     textInput.value = ""
     document.body.style.overflow = "auto"
     alertArea.classList.remove("visible")
     popup.classList.remove("visible")
+    isAlertOn = false
 }
 
 const loadPrologQuery = (query, toBeConsulted) => {
@@ -244,8 +239,9 @@ async function addTodoObject() {
     const hasKeywords = await checkIfContainKeywords(todoString)
 
     if(hasKeywords) {
-        popup.classList.toggle("visible")
+        popup.classList.add("visible")
         document.body.style.overflow = "hidden"
+        isAlertOn = true
         return
     }
 
@@ -261,3 +257,9 @@ popupAddButton.addEventListener("click", () => {
 })
 
 popupCancelButton.addEventListener("click", removeAlerts)
+
+document.addEventListener("keypress", e => {
+    if (e.key == "Enter" && !isAlertOn) {
+        addTodoObject()
+    }
+})
