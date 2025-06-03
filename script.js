@@ -5,6 +5,8 @@ const doneToDoArea = document.querySelector("#done-todo")
 const addButton = document.querySelector("#add-todo-button")
 const textInput = document.querySelector("#todo-text-input")
 const alertArea = document.querySelector("#too-long-text-alert")
+const toDoH2 = document.querySelector("#to-do-h2")
+const finishedH2 = document.querySelector("#finished-todo-h2")
 const popup = document.querySelector("#popup")
 const popupAddButton = document.querySelector("#popup-add-button")
 const popupCancelButton = document.querySelector("#popup-delete-button")
@@ -21,7 +23,7 @@ class PrologRules {
         this.tooLongTextRule = `
             toolongtext(X) :- X > 40.
         `
-        this.existingTodo = [] //contains: [id, full string, **keywords array]
+        this.existingTodo = [] //[id, full string, array of keywords]
     }
 
     getExistingTodoPrologString = () => {
@@ -117,11 +119,15 @@ class ToDo {
 
     eventListeners = () => {
         this.deleteButton.addEventListener("click", this.killElement)
+        this.deleteButton.addEventListener("click", showOrHideNotDoneTodoH2)
+        this.deleteButton.addEventListener("click", hideToDoH2)
 
         this.doneButton.addEventListener("click", () => {
             doneToDoArea.appendChild(this.todoDiv)
             this.doneButtonDelete()
-        })
+            showOrHideNotDoneTodoH2()
+            hideToDoH2()
+        })   
     }
 
     killElement = () => {
@@ -131,6 +137,32 @@ class ToDo {
     }
 }
 
+const showOrHideNotDoneTodoH2 = () => {
+    const childElements = doneToDoArea.children.length
+    if (childElements == 1) {
+        finishedH2.classList.remove("visible")
+    } else {
+        finishedH2.classList.add("visible")
+    }
+}
+
+const showToDoH2 = () => {
+    const childElementsCount = notDoneToDoArea.children.length
+    console.log(childElementsCount)
+    if (childElementsCount == 1) {
+        toDoH2.classList.add("visible")
+    }
+}
+
+const hideToDoH2 = () => {
+    const childElementsCount = notDoneToDoArea.children.length 
+    console.log(childElementsCount)
+    if (childElementsCount == 1) {
+        toDoH2.classList.remove("visible")
+    }
+}
+//It is weird when you see the same condition as in showToDoH2, but there is a 
+//problem with async. it just works.
 
 const removeAlerts = () => {
     textInput.value = ""
@@ -141,18 +173,18 @@ const removeAlerts = () => {
 }
 
 const loadPrologQuery = (query, toBeConsulted) => {
-        return new Promise((resolve, reject) => {
-            prologSession.consult(toBeConsulted)
-            prologSession.query(query)
-            prologSession.answer(x => { 
-                const val = prologSession.format_answer(x)
-                if (val === "true") {
-                    resolve(true)
-                } else {
-                    resolve(false)
-                }
-            })
+    return new Promise((resolve, reject) => {
+        prologSession.consult(toBeConsulted)
+        prologSession.query(query)
+        prologSession.answer(x => { 
+            const val = prologSession.format_answer(x)
+            if (val === "true") {
+                resolve(true)
+            } else {
+                resolve(false)
+            }
         })
+    })
 }
 
 
@@ -244,7 +276,7 @@ async function addTodoObject() {
         isAlertOn = true
         return
     }
-
+    showToDoH2()
     addAfterValidation(todoString)
 }
 
@@ -252,6 +284,7 @@ addButton.addEventListener("click", addTodoObject)
 
 popupAddButton.addEventListener("click", () => {
     const todoString = textInput.value
+    showToDoH2()
     addAfterValidation(todoString)
     removeAlerts()
 })
