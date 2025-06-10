@@ -15,6 +15,8 @@ const prologSession = pl.create()
 let counterForID = 0 
 let isAlertOn = false
 
+//class
+
 class PrologRules {
     constructor() {
         this.emptyTextRule = `
@@ -137,6 +139,8 @@ class ToDo {
     }
 }
 
+//functions
+
 const showOrHideNotDoneTodoH2 = () => {
     const childElements = doneToDoArea.children.length
     if (childElements == 1) {
@@ -148,7 +152,6 @@ const showOrHideNotDoneTodoH2 = () => {
 
 const showToDoH2 = () => {
     const childElementsCount = notDoneToDoArea.children.length
-    console.log(childElementsCount)
     if (childElementsCount == 1) {
         toDoH2.classList.add("visible")
     }
@@ -156,13 +159,10 @@ const showToDoH2 = () => {
 
 const hideToDoH2 = () => {
     const childElementsCount = notDoneToDoArea.children.length 
-    console.log(childElementsCount)
     if (childElementsCount == 1) {
         toDoH2.classList.remove("visible")
     }
 }
-//It is weird when you see the same condition as in showToDoH2, but there is a 
-//problem with async. it just works.
 
 const removeAlerts = () => {
     textInput.value = ""
@@ -186,7 +186,6 @@ const loadPrologQuery = (query, toBeConsulted) => {
         })
     })
 }
-
 
 async function emptyText(str) {
     const query = `emptytext('a${str.length}').`
@@ -213,7 +212,7 @@ async function checkIfNotAlreadyExist(str) {
     if (toBeConsulted == -1) {
         return false
     }
-    const query = `existTodoString('${str}').`
+    const query = `existTodoString('${str.trim()}').`
     const prologResponse = await loadPrologQuery(query, toBeConsulted).then(res => {
         return res 
     })
@@ -242,7 +241,7 @@ async function checkIfContainKeywords(str) {
 const addAfterValidation = (todoString) => {
     removeAlerts()
     const todo = new ToDo(todoString)
-    prologRules.addTodoString(todoString, todo.id)
+    prologRules.addTodoString(todoString.trim(), todo.id)
 }
 
 async function addTodoObject() {
@@ -264,7 +263,7 @@ async function addTodoObject() {
     const alreadyExist = await checkIfNotAlreadyExist(todoString)
 
     if(alreadyExist) {
-        alert("w tym miejscu pojawi się coś gdy tekst już istnieje ;)")
+        alert("Istnieje identyczny ToDos")
         return
     }
 
@@ -279,6 +278,8 @@ async function addTodoObject() {
     showToDoH2()
     addAfterValidation(todoString)
 }
+
+//event listeners
 
 addButton.addEventListener("click", addTodoObject)
 
