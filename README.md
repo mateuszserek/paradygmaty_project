@@ -1,2 +1,3 @@
-# Todo list project by Mateusz Serek
-- Jedyne wymaganie do uruchomienia to połączenie z internetem. Projekt korzysta z tau prolog którego nie trzeba instalować.
+# Todo list project
+- Project for subject Programming paradigms
+- To-do's are being validated by Prolog programming language
